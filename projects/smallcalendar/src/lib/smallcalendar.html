@@ -1,0 +1,39 @@
+
+    <div [ngSwitch]="view" tabindex="0" class="calendar_container">
+        <div *ngSwitchCase="'date'">
+          <div class="header date">
+            <i class="Symbol-chevron-left" (mousedown)="blockevents($event)" (mouseup)="prev(null,$event)"></i>
+            <span [innerHtml]="cal_date|date:'yyyy MMMM '" (mouseup)="setView('month',$event)"></span>
+            <i class="Symbol-chevron-right" (mousedown)="blockevents($event)" (mouseup)="next(null,$event)"></i>
+          </div>
+          <div class="week names">
+            <span *ngFor="let weekday of weekdays;" class="day" style="overflow: hidden" [innerHtml]="weekday|date:'EEE'"></span>
+          </div>
+          <div class="week" *ngFor="let week of weeks;">
+            <span class="day"
+             [ngClass]="{ today: isSameDay(day), 'different-month': (day.getMonth() != cal_date.getMonth()), selected: (selected == day) }"
+                  (click)="select(day)" *ngFor="let day of week;" [innerHtml]="day.getDate()"></span>
+          </div>
+        </div>
+        <div *ngSwitchCase="'year'">
+          <div class="header year">
+            <i class="Symbol-chevron-left" (mousedown)="blockevents($event)" (mouseup)="prev(12,$event)"></i>
+            <span [innerHtml]="years[0].getFullYear()+' - '+years[years.length-1].getFullYear()"></span>
+            <i class="Symbol-chevron-right" (mousedown)="blockevents($event)" (mouseup)="next(12,$event)"></i>
+          </div>
+          <span class="day month" [ngClass]="{ today: isSameYear(year) }" (click)="blockevents($event)"
+                (mouseup)="setDate(year,$event)" *ngFor="let year of years;" [innerHtml]="year.getFullYear()"></span>
+        </div>
+        <div *ngSwitchCase="'month'">
+          <div class="header month">
+            <i class="Symbol-chevron-left" (mousedown)="blockevents($event)" (mouseup)="prev(null,$event)"></i>
+            <span [innerHtml]="cal_date|date:'yyyy'" (mouseup)="setView('year',$event)"></span>
+            <i class="Symbol-chevron-right" (mousedown)="blockevents($event)" (mouseup)="next(null,$event)"></i>
+          </div>
+          <span class="day month" [ngClass]="{ today: isSameMonth(month) }"
+                (mouseup)="setDate(month,$event)" *ngFor="let month of months;" [innerHtml]="month|date:'MMM'"></span>
+        </div>
+      </div>
+
+
+  
